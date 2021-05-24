@@ -258,6 +258,7 @@ function Items:AddSeparator(Label)
 	end
 end
 
+
 ---CheckBox
 ---@param Label string
 ---@param Items table<any, any>
@@ -409,6 +410,37 @@ function Items:AddList(Label, Items, Index, Description, Style, Enabled, Actions
 			end
 
 			RageUI.Options = RageUI.Options + 1
+		end
+	end
+end
+
+---Heritage
+---@param Mum number
+---@param Dad number
+function Items:Heritage(Mum, Dad)
+	local CurrentMenu = RageUI.CurrentMenu;
+	if CurrentMenu ~= nil then
+		if CurrentMenu() then
+			if Mum < 0 or Mum > 21 then
+				Mum = 0
+			end
+			if Dad < 0 or Dad > 23 then
+				Dad = 0
+			end
+			if Mum == 21 then
+				Mum = "special_female_" .. (tonumber(string.sub(Mum, 2, 2)) - 1)
+			else
+				Mum = "female_" .. Mum
+			end
+			if Dad >= 21 then
+				Dad = "special_male_" .. (tonumber(string.sub(Dad, 2, 2)) - 1)
+			else
+				Dad = "male_" .. Dad
+			end
+			Graphics.Sprite("pause_menu_pages_char_mom_dad", "mumdadbg", CurrentMenu.X, CurrentMenu.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 431 + (CurrentMenu.WidthOffset / 1), 228)
+			Graphics.Sprite("char_creator_portraits", Dad, CurrentMenu.X + 195 + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset,228, 228)
+			Graphics.Sprite("char_creator_portraits", Mum, CurrentMenu.X + 25 + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 228, 228)
+			RageUI.ItemOffset = RageUI.ItemOffset + 228
 		end
 	end
 end
