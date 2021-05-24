@@ -51,9 +51,7 @@ function RageUI.GoUp(Options)
                 Audio.PlaySound(RageUI.Settings.Audio.UpDown.audioName, RageUI.Settings.Audio.UpDown.audioRef)
                 RageUI.LastControl = true
                 if (CurrentMenu.onIndexChange ~= nil) then
-                    Citizen.CreateThread(function()
                         CurrentMenu.onIndexChange(CurrentMenu.Index)
-                    end)
                 end
             else
 
@@ -100,9 +98,7 @@ function RageUI.GoDown(Options)
                 Audio.PlaySound(RageUI.Settings.Audio.UpDown.audioName, RageUI.Settings.Audio.UpDown.audioRef)
                 RageUI.LastControl = false
                 if (CurrentMenu.onIndexChange ~= nil) then
-                    Citizen.CreateThread(function()
                         CurrentMenu.onIndexChange(CurrentMenu.Index)
-                    end)
                 end
             else
 
