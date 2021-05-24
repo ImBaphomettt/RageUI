@@ -244,13 +244,6 @@ RageUI.Settings = {
 	},
 }
 
-function RageUI.IsMouseInBounds(X, Y, Width, Height)
-	local MX, MY = math.round(GetControlNormal(2, 239) * 1920) / 1920, math.round(GetControlNormal(2, 240) * 1080) / 1080
-	X, Y = X / 1920, Y / 1080
-	Width, Height = Width / 1920, Height / 1080
-	return (MX >= X and MX <= X + Width) and (MY > Y and MY < Y + Height)
-end
-
 function RageUI.GetSafeZoneBounds()
 	local SafeSize = GetSafeZoneSize()
 	SafeSize = math.round(SafeSize, 2)
@@ -471,7 +464,7 @@ end
 
 function RageUI.ItemsMouseBounds(CurrentMenu, Selected, Option, SettingsButton)
 	local Hovered = false
-	Hovered = RageUI.IsMouseInBounds(CurrentMenu.X + CurrentMenu.SafeZoneSize.X, CurrentMenu.Y + SettingsButton.Rectangle.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, SettingsButton.Rectangle.Width + CurrentMenu.WidthOffset, SettingsButton.Rectangle.Height)
+	Hovered = Graphics.IsMouseInBounds(CurrentMenu.X + CurrentMenu.SafeZoneSize.X, CurrentMenu.Y + SettingsButton.Rectangle.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, SettingsButton.Rectangle.Width + CurrentMenu.WidthOffset, SettingsButton.Rectangle.Height)
 	if Hovered and not Selected then
 		Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y + SettingsButton.Rectangle.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, SettingsButton.Rectangle.Width + CurrentMenu.WidthOffset, SettingsButton.Rectangle.Height, 255, 255, 255, 20)
 		if CurrentMenu.Controls.Click.Active then
