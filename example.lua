@@ -10,7 +10,8 @@ local Checked = false;
 
 function RageUI.PoolMenus:Example()
 	MainMenu:IsVisible(function(Items)
-		Items:AddButton("Hello world", "Hello world.", {}, function(onSelected, onHovered, onActive)
+		Items:Heritage(1, 2)
+		Items:AddButton("Hello world", "Hello world.", { IsDisable = false }, function(onSelected, onHovered, onActive)
 
 		end)
 		Items:AddSeparator("Separator")
@@ -19,6 +20,8 @@ function RageUI.PoolMenus:Example()
 				Checked = IsChecked
 			end
 		end)
+
+
 
 	end, function(Panels)
 
