@@ -103,8 +103,8 @@ function Items:AddButton(Label, Description, Style, Action, Submenu)
 				local Selected = (CurrentMenu.Controls.Select.Active or (Hovered and CurrentMenu.Controls.Click.Active)) and Active
 				Action(Selected, Hovered, Active)
 				if Selected then
-					local Audio = RageUI.Settings.Audio
-					Audio.PlaySound(Audio[Audio.Use].Select.audioName, Audio[Audio.Use].Select.audioRef)
+
+					Audio.PlaySound(RageUI.Settings.Audio.Select.audioName, RageUI.Settings.Audio.Select.audioRef)
 					if Submenu and Submenu() then
 						RageUI.NextMenu = Submenu
 					end
@@ -206,8 +206,8 @@ function Items:CheckBox(Label, Description, Checked, Style, Actions)
 
 				if (Selected) and (CurrentMenu.Controls.Select.Active or (Hovered and CurrentMenu.Controls.Click.Active)) then
 					Checked = not Checked
-					local Audio = RageUI.Settings.Audio
-					Audio.PlaySound(Audio[Audio.Use].Select.audioName, Audio[Audio.Use].Select.audioRef)
+
+					Audio.PlaySound(RageUI.Settings.Audio.Select.audioName, RageUI.Settings.Audio.Select.audioRef)
 				end
 				Actions(Selected, Checked, Hovered)
 

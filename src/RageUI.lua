@@ -172,34 +172,31 @@ RageUI.Settings = {
 	},
 	Audio = {
 		Id = nil,
-		Use = "Default",
-		Default = {
-			UpDown = {
-				audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
-				audioRef = "NAV_UP_DOWN",
-			},
-			LeftRight = {
-				audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
-				audioRef = "NAV_LEFT_RIGHT",
-			},
-			Select = {
-				audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
-				audioRef = "SELECT",
-			},
-			Back = {
-				audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
-				audioRef = "BACK",
-			},
-			Error = {
-				audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
-				audioRef = "ERROR",
-			},
-			Slider = {
-				audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
-				audioRef = "CONTINUOUS_SLIDER",
-				Id = nil
-			},
-		}
+		UpDown = {
+			audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
+			audioRef = "NAV_UP_DOWN",
+		},
+		LeftRight = {
+			audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
+			audioRef = "NAV_LEFT_RIGHT",
+		},
+		Select = {
+			audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
+			audioRef = "SELECT",
+		},
+		Back = {
+			audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
+			audioRef = "BACK",
+		},
+		Error = {
+			audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
+			audioRef = "ERROR",
+		},
+		Slider = {
+			audioName = "HUD_FRONTEND_DEFAULT_SOUNDSET",
+			audioRef = "CONTINUOUS_SLIDER",
+			Id = nil
+		},
 	},
 	Items = {
 		Title = {
@@ -420,8 +417,8 @@ function RageUI.Render()
 			if CurrentMenu.Controls.Back.Enabled then
 				if CurrentMenu.Controls.Back.Pressed and CurrentMenu.Closable then
 					CurrentMenu.Controls.Back.Pressed = false
-					local Audio = RageUI.Settings.Audio
-					Audio.PlaySound(Audio[Audio.Use].Back.audioName, Audio[Audio.Use].Back.audioRef)
+
+					Audio.PlaySound(RageUI.Settings.Audio.Back.audioName, RageUI.Settings.Audio.Back.audioRef)
 
 					if CurrentMenu.Closed ~= nil then
 						collectgarbage()
@@ -479,8 +476,8 @@ function RageUI.ItemsMouseBounds(CurrentMenu, Selected, Option, SettingsButton)
 		Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y + SettingsButton.Rectangle.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, SettingsButton.Rectangle.Width + CurrentMenu.WidthOffset, SettingsButton.Rectangle.Height, 255, 255, 255, 20)
 		if CurrentMenu.Controls.Click.Active then
 			CurrentMenu.Index = Option
-			local Audio = RageUI.Settings.Audio
-			Audio.PlaySound(Audio[Audio.Use].UpDown.audioName, Audio[Audio.Use].UpDown.audioRef)
+
+			Audio.PlaySound(RageUI.Settings.Audio.UpDown.audioName, RageUI.Settings.Audio.UpDown.audioRef)
 		end
 	end
 	return Hovered;

@@ -47,8 +47,8 @@ function RageUI.GoUp(Options)
                     end
                 end
 
-                local Audio = RageUI.Settings.Audio
-                Audio.PlaySound(Audio[Audio.Use].UpDown.audioName, Audio[Audio.Use].UpDown.audioRef)
+                
+                Audio.PlaySound(RageUI.Settings.Audio.UpDown.audioName, RageUI.Settings.Audio.UpDown.audioRef)
                 RageUI.LastControl = true
                 if (CurrentMenu.onIndexChange ~= nil) then
                     Citizen.CreateThread(function()
@@ -56,8 +56,8 @@ function RageUI.GoUp(Options)
                     end)
                 end
             else
-                local Audio = RageUI.Settings.Audio
-                Audio.PlaySound(Audio[Audio.Use].Error.audioName, Audio[Audio.Use].Error.audioRef)
+
+                Audio.PlaySound(RageUI.Settings.Audio.Error.audioName, RageUI.Settings.Audio.Error.audioRef)
             end
         end
     end
@@ -96,8 +96,8 @@ function RageUI.GoDown(Options)
                         CurrentMenu.Index = CurrentMenu.Index + 1
                     end
                 end
-                local Audio = RageUI.Settings.Audio
-                Audio.PlaySound(Audio[Audio.Use].UpDown.audioName, Audio[Audio.Use].UpDown.audioRef)
+
+                Audio.PlaySound(RageUI.Settings.Audio.UpDown.audioName, RageUI.Settings.Audio.UpDown.audioRef)
                 RageUI.LastControl = false
                 if (CurrentMenu.onIndexChange ~= nil) then
                     Citizen.CreateThread(function()
@@ -105,8 +105,8 @@ function RageUI.GoDown(Options)
                     end)
                 end
             else
-                local Audio = RageUI.Settings.Audio
-                Audio.PlaySound(Audio[Audio.Use].Error.audioName, Audio[Audio.Use].Error.audioRef)
+
+                Audio.PlaySound(RageUI.Settings.Audio.Error.audioName, RageUI.Settings.Audio.Error.audioRef)
             end
         end
     end
@@ -328,8 +328,8 @@ end
 function RageUI.GoBack()
     local CurrentMenu = RageUI.CurrentMenu
     if CurrentMenu ~= nil then
-        local Audio = RageUI.Settings.Audio
-        Audio.PlaySound(Audio[Audio.Use].Back.audioName, Audio[Audio.Use].Back.audioRef)
+
+        Audio.PlaySound(RageUI.Settings.Audio.Back.audioName, RageUI.Settings.Audio.Back.audioRef)
         if CurrentMenu.Parent ~= nil then
             if CurrentMenu.Parent() then
                 RageUI.NextMenu = CurrentMenu.Parent
