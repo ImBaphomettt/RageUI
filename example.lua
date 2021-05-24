@@ -5,8 +5,11 @@
 ---
 
 local MainMenu = RageUI.CreateMenu("Title", "SUBTITLE");
+MainMenu.EnableMouse = true;
 
 local Checked = false;
+
+local GridX, GridY = 0, 0
 
 function RageUI.PoolMenus:Example()
 	MainMenu:IsVisible(function(Items)
@@ -22,9 +25,11 @@ function RageUI.PoolMenus:Example()
 		end)
 
 
-
 	end, function(Panels)
-
+		Panels:Grid(GridX, GridY, "Top", "Bottom", "Left", "Right", function(X, Y, CharacterX, CharacterY)
+			GridX = X;
+			GridY = Y;
+		end, 1)
 	end)
 end
 

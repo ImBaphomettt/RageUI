@@ -222,8 +222,8 @@ end
 
 ---IsVisible
 ---@param Item fun(Item:Items)
----@param Panels fun(Panel:Items)
-function RageUIMenus:IsVisible(Item, Panels)
+---@param Panel fun(Panel:Panels
+function RageUIMenus:IsVisible(Item, Panel)
 	if (RageUI.Visible(self)) and (UpdateOnscreenKeyboard() ~= 0) and (UpdateOnscreenKeyboard() ~= 3) then
 		self.Description = nil;
 		RageUI.Banner()
@@ -232,7 +232,7 @@ function RageUIMenus:IsVisible(Item, Panels)
 		RageUI.Background();
 		RageUI.Navigation();
 		RageUI.Description();
-		Panels();
+		Panel(Panels);
 		RageUI.PoolMenus.Timer = 1
 		RageUI.Render()
 	end
