@@ -16,6 +16,9 @@ local ItemsSettings = {
 			"shop_box_cross", -- 6
 		},
 		X = 380, Y = -6, Width = 50, Height = 50
+	},
+	Rectangle = {
+		Y = 0, Width = 431, Height = 38
 	}
 }
 
@@ -99,7 +102,7 @@ function Items:AddButton(Label, Description, Style, Action, Submenu)
 			RageUI.ItemOffset = RageUI.ItemOffset + 38
 			RageUI.ItemsDescription(CurrentMenu, Description, Active);
 			if not (Style.IsDisable) then
-				local Hovered = CurrentMenu.EnableMouse and (CurrentMenu.CursorStyle == 0 or CurrentMenu.CursorStyle == 1) and RageUI.ItemsMouseBounds(CurrentMenu, Active, Option + 1, { Y = 0, Width = 431, Height = 38 });
+				local Hovered = CurrentMenu.EnableMouse and (CurrentMenu.CursorStyle == 0 or CurrentMenu.CursorStyle == 1) and RageUI.ItemsMouseBounds(CurrentMenu, Active, Option + 1, ItemsSettings.Rectangle);
 				local Selected = (CurrentMenu.Controls.Select.Active or (Hovered and CurrentMenu.Controls.Click.Active)) and Active
 				Action(Selected, Hovered, Active)
 				if Selected then
@@ -138,7 +141,7 @@ function Items:CheckBox(Label, Description, Checked, Style, Actions)
 				local Hovered = false;
 
 				if CurrentMenu.EnableMouse == true and (CurrentMenu.CursorStyle == 0) or (CurrentMenu.CursorStyle == 1) then
-					Hovered = RageUI.ItemsMouseBounds(CurrentMenu, Selected, Option, { Rectangle = { Y = 0, Width = 431, Height = 38 } });
+					Hovered = RageUI.ItemsMouseBounds(CurrentMenu, Selected, Option, ItemsSettings.Rectangle);
 				end
 				if Selected then
 					Graphics.Sprite("commonmenu", "gradient_nav", CurrentMenu.X, CurrentMenu.Y + 0 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 431 + CurrentMenu.WidthOffset, 38)
@@ -250,6 +253,162 @@ function Items:AddSeparator(Label)
 					end
 				end
 			end
+			RageUI.Options = RageUI.Options + 1
+		end
+	end
+end
+
+
+---CheckBox
+---@param Label string
+---@param Items table<any, any>
+---@param Index number
+---@param Style table<any, any>
+---@param Description string
+---@param Actions fun(onSelected:boolean, IsChecked:boolean, onHovered:boolean)
+---@param Submenu any
+function Items:AddList(Label, Items, Index, Description, Style, Enabled, Actions, Submenu)
+	local CurrentMenu = RageUI.CurrentMenu;
+	if CurrentMenu ~= nil then
+		if CurrentMenu() then
+
+			---@type number
+			local Option = RageUI.Options + 1
+
+			if CurrentMenu.Pagination.Minimum <= Option and CurrentMenu.Pagination.Maximum >= Option then
+
+				---@type number
+				local Selected = CurrentMenu.Index == Option
+
+				---@type boolean
+				local LeftArrowHovered, RightArrowHovered = false, false
+
+				RageUI.ItemsSafeZone(CurrentMenu)
+
+				local Hovered = false;
+				local LeftBadgeOffset = ((Style.LeftBadge == RageUI.BadgeStyle.None or Style.LeftBadge == nil) and 0 or 27)
+				local RightBadgeOffset = ((Style.RightBadge == RageUI.BadgeStyle.None or Style.RightBadge == nil) and 0 or 32)
+				local RightOffset = 0
+				---@type boolean
+				if CurrentMenu.EnableMouse == true and (CurrentMenu.CursorStyle == 0) or (CurrentMenu.CursorStyle == 1) then
+					Hovered = RageUI.ItemsMouseBounds(CurrentMenu, Selected, Option, ItemsSettings.Rectangle);
+				end
+				local ListText = (type(Items[Index]) == "table") and string.format("← %s →", Items[Index].Name) or string.format("← %s →", Items[Index]) or "NIL"
+
+				if Selected then
+					RenderSprite("commonmenu", "gradient_nav", CurrentMenu.X, CurrentMenu.Y + 0 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 431 + CurrentMenu.WidthOffset, 38)
+				end
+				if Enabled == true or Enabled == nil then
+					if Selected then
+						if Style.RightLabel ~= nil and Style.RightLabel ~= "" then
+							RenderText(Style.RightLabel, CurrentMenu.X + 420 - RightBadgeOffset + CurrentMenu.WidthOffset, CurrentMenu.Y + 4 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.35, 0, 0, 0, 255, 2)
+							RightOffset = MeasureStringWidth(Style.RightLabel, 0, 0.35)
+						end
+					else
+						if Style.RightLabel ~= nil and Style.RightLabel ~= "" then
+							RightOffset = MeasureStringWidth(Style.RightLabel, 0, 0.35)
+							RenderText(Style.RightLabel, CurrentMenu.X + 420 - RightBadgeOffset + CurrentMenu.WidthOffset, CurrentMenu.Y + 4 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.35, 245, 245, 245, 255, 2)
+						end
+					end
+				end
+				RightOffset = RightBadgeOffset * 1.3 + RightOffset
+				if Enabled == true or Enabled == nil then
+					if Selected then
+						RenderText(Label, CurrentMenu.X + 8 + LeftBadgeOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.33, 0, 0, 0, 255)
+						RenderText(ListText, CurrentMenu.X + SettingsList.Text.X + 15 + CurrentMenu.WidthOffset - RightOffset, CurrentMenu.Y + SettingsList.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, SettingsList.Text.Scale, 0, 0, 0, 255, 2)
+					else
+						RenderText(Label, CurrentMenu.X + 8 + LeftBadgeOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.33, 245, 245, 245, 255)
+						RenderText(ListText, CurrentMenu.X + SettingsList.Text.X + 15 + CurrentMenu.WidthOffset - RightOffset, CurrentMenu.Y + SettingsList.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, SettingsList.Text.Scale, 245, 245, 245, 255, 2)
+					end
+				else
+					RenderText(Label, CurrentMenu.X + 8 + LeftBadgeOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.33, 163, 159, 148, 255)
+					if Selected then
+						RenderText(ListText, CurrentMenu.X + SettingsList.Text.X + CurrentMenu.WidthOffset, CurrentMenu.Y + SettingsList.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, SettingsList.Text.Scale, 163, 159, 148, 255, 2)
+					else
+						RenderText(ListText, CurrentMenu.X + SettingsList.Text.X + 15 + CurrentMenu.WidthOffset, CurrentMenu.Y + SettingsList.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, SettingsList.Text.Scale, 163, 159, 148, 255, 2)
+					end
+				end
+
+				if type(Style) == "table" then
+					if Style.Enabled == true or Style.Enabled == nil then
+						if type(Style) == 'table' then
+							if Style.LeftBadge ~= nil then
+								if Style.LeftBadge ~= RageUI.BadgeStyle.None then
+									local BadgeData = Style.LeftBadge(Selected)
+
+									RenderSprite(BadgeData.BadgeDictionary or "commonmenu", BadgeData.BadgeTexture or "", CurrentMenu.X, CurrentMenu.Y + -2 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 40, 40, 0, BadgeData.BadgeColour and BadgeData.BadgeColour.R or 255, BadgeData.BadgeColour and BadgeData.BadgeColour.G or 255, BadgeData.BadgeColour and BadgeData.BadgeColour.B or 255, BadgeData.BadgeColour and BadgeData.BadgeColour.A or 255)
+								end
+							end
+
+							if Style.RightBadge ~= nil then
+								if Style.RightBadge ~= RageUI.BadgeStyle.None then
+									local BadgeData = Style.RightBadge(Selected)
+
+									RenderSprite(BadgeData.BadgeDictionary or "commonmenu", BadgeData.BadgeTexture or "", CurrentMenu.X + 385 + CurrentMenu.WidthOffset, CurrentMenu.Y + -2 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 40, 40, 0, BadgeData.BadgeColour and BadgeData.BadgeColour.R or 255, BadgeData.BadgeColour and BadgeData.BadgeColour.G or 255, BadgeData.BadgeColour and BadgeData.BadgeColour.B or 255, BadgeData.BadgeColour and BadgeData.BadgeColour.A or 255)
+								end
+							end
+						end
+					else
+						---@type table
+						local LeftBadge = RageUI.BadgeStyle.Lock
+						---@type number
+						if LeftBadge ~= RageUI.BadgeStyle.None and LeftBadge ~= nil then
+							local BadgeData = LeftBadge(Selected)
+
+							RenderSprite(BadgeData.BadgeDictionary or "commonmenu", BadgeData.BadgeTexture or "", CurrentMenu.X, CurrentMenu.Y + -2 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 40, 40, 0, BadgeData.BadgeColour.R or 255, BadgeData.BadgeColour.G or 255, BadgeData.BadgeColour.B or 255, BadgeData.BadgeColour.A or 255)
+						end
+					end
+				else
+					error("UICheckBox Style is not a `table`")
+				end
+
+				LeftArrowHovered = RageUI.IsMouseInBounds(CurrentMenu.X + SettingsList.Text.X + CurrentMenu.WidthOffset - RightOffset + CurrentMenu.SafeZoneSize.X, CurrentMenu.Y + SettingsList.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset + 2.5  + CurrentMenu.SafeZoneSize.Y , 15, 22.5)
+
+				RightArrowHovered = RageUI.IsMouseInBounds(CurrentMenu.X + SettingsList.Text.X + CurrentMenu.WidthOffset + CurrentMenu.SafeZoneSize.X - RightOffset - MeasureStringWidth(ListText, 0, SettingsList.Text.Scale), CurrentMenu.Y + SettingsList.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset + 2.5 + CurrentMenu.SafeZoneSize.Y , 15, 22.5)
+				RageUI.ItemOffset = RageUI.ItemOffset + 38
+
+				RageUI.ItemsDescription(CurrentMenu, Description, Selected);
+
+				if Selected and (CurrentMenu.Controls.Left.Active or (CurrentMenu.Controls.Click.Active and LeftArrowHovered)) and not (CurrentMenu.Controls.Right.Active or (CurrentMenu.Controls.Click.Active and RightArrowHovered)) then
+					Index = Index - 1
+					if Index < 1 then
+						Index = #Items
+					end
+					if (Actions.onListChange ~= nil) then
+						Actions.onListChange(Index, Items[Index]);
+					end
+					local Audio = RageUI.Settings.Audio
+					RageUI.PlaySound(Audio[Audio.Use].LeftRight.audioName, Audio[Audio.Use].LeftRight.audioRef)
+				elseif Selected and (CurrentMenu.Controls.Right.Active or (CurrentMenu.Controls.Click.Active and RightArrowHovered)) and not (CurrentMenu.Controls.Left.Active or (CurrentMenu.Controls.Click.Active and LeftArrowHovered)) then
+					Index = Index + 1
+					if Index > #Items then
+						Index = 1
+					end
+					if (Actions.onListChange ~= nil) then
+						Actions.onListChange(Index, Items[Index]);
+					end
+					local Audio = RageUI.Settings.Audio
+					RageUI.PlaySound(Audio[Audio.Use].LeftRight.audioName, Audio[Audio.Use].LeftRight.audioRef)
+				end
+
+				if Selected and (CurrentMenu.Controls.Select.Active or ((Hovered and CurrentMenu.Controls.Click.Active) and (not LeftArrowHovered and not RightArrowHovered))) then
+					local Audio = RageUI.Settings.Audio
+					RageUI.PlaySound(Audio[Audio.Use].Select.audioName, Audio[Audio.Use].Select.audioRef)
+
+					if (Actions.onSelected ~= nil) then
+						Actions.onSelected(Index, Items[Index]);
+					end
+
+					if Submenu ~= nil and type(Submenu) == "table" then
+						RageUI.NextMenu = Submenu[Index]
+					end
+				elseif Selected then
+					if(Actions.onActive ~= nil) then
+						Actions.onActive()
+					end
+				end
+			end
+
 			RageUI.Options = RageUI.Options + 1
 		end
 	end
