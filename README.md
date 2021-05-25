@@ -2,4 +2,4 @@ In the next few days, I will release one of the latest versions of RageUI. This 
 
 This version will be less customizable, and much more powerful, in order to meet MY requirements, and not those of the community.
 
-keep informerd on my twitter https://twitter.com/ThisIsBaphoMeme.
+Keep informed on Riv-Tech https://discord.gg/TKX2nVq9ue

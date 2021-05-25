@@ -225,7 +225,6 @@ end
 ---@param Panel fun(Panel:Panels
 function RageUIMenus:IsVisible(Item, Panel)
 	if (RageUI.Visible(self)) and (UpdateOnscreenKeyboard() ~= 0) and (UpdateOnscreenKeyboard() ~= 3) then
-		self.Description = nil;
 		RageUI.Banner()
 		RageUI.Subtitle()
 		Item(Items);
