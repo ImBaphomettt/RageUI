@@ -285,7 +285,7 @@ function Items:AddList(Label, Items, Index, Description, Style, Actions, Submenu
         end
         RightOffset = RightBadgeOffset * 1.3 + RightOffset
         if (not Style.IsDisabled) then
-            if Active then
+            if (Active) then
                 Graphics.Text(Label, CurrentMenu.X + 8 + LeftBadgeOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.33, 0, 0, 0, 255)
                 Graphics.Text(ListText, CurrentMenu.X + 403 + 15 + CurrentMenu.WidthOffset - RightOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.35, 0, 0, 0, 255, 2)
             else
@@ -294,11 +294,7 @@ function Items:AddList(Label, Items, Index, Description, Style, Actions, Submenu
             end
         else
             Graphics.Text(Label, CurrentMenu.X + 8 + LeftBadgeOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.33, 163, 159, 148, 255)
-            if Active then
-                Graphics.Text(ListText, CurrentMenu.X + 403 + CurrentMenu.WidthOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.35, 163, 159, 148, 255, 2)
-            else
-                Graphics.Text(ListText, CurrentMenu.X + 403 + 15 + CurrentMenu.WidthOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.35, 163, 159, 148, 255, 2)
-            end
+            Graphics.Text(ListText, CurrentMenu.X + 403 + 15 + CurrentMenu.WidthOffset, CurrentMenu.Y + 3 + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, 0.35, 163, 159, 148, 255, 2)
         end
 
         if type(Style) == "table" then
@@ -332,30 +328,32 @@ function Items:AddList(Label, Items, Index, Description, Style, Actions, Submenu
         RageUI.ItemOffset = RageUI.ItemOffset + 38
 
         if (Active) then
-            if (CurrentMenu.Controls.Left.Active) and not (CurrentMenu.Controls.Right.Active) then
-                Index = Index - 1
-                if Index < 1 then
-                    Index = #Items
-                end
-                onListChange = true
-                Audio.PlaySound(RageUI.Settings.Audio.LeftRight.audioName, RageUI.Settings.Audio.LeftRight.audioRef)
-            elseif (CurrentMenu.Controls.Right.Active) and not (CurrentMenu.Controls.Left.Active) then
-                Index = Index + 1
-                if Index > #Items then
-                    Index = 1
-                end
-                onListChange = true
-                Audio.PlaySound(RageUI.Settings.Audio.LeftRight.audioName, RageUI.Settings.Audio.LeftRight.audioRef)
-            end
-            local Selected = (CurrentMenu.Controls.Select.Active)
-            Actions(Index, Selected, onListChange, Active)
-            if (Selected) then
-                Audio.PlaySound(RageUI.Settings.Audio.Select.audioName, RageUI.Settings.Audio.Select.audioRef)
-                if Submenu ~= nil and type(Submenu) == "table" then
-                    RageUI.NextMenu = Submenu[Index]
-                end
-            end
             RageUI.ItemsDescription(Description);
+            if (not Style.IsDisabled) then
+                if (CurrentMenu.Controls.Left.Active) and not (CurrentMenu.Controls.Right.Active) then
+                    Index = Index - 1
+                    if Index < 1 then
+                        Index = #Items
+                    end
+                    onListChange = true
+                    Audio.PlaySound(RageUI.Settings.Audio.LeftRight.audioName, RageUI.Settings.Audio.LeftRight.audioRef)
+                elseif (CurrentMenu.Controls.Right.Active) and not (CurrentMenu.Controls.Left.Active) then
+                    Index = Index + 1
+                    if Index > #Items then
+                        Index = 1
+                    end
+                    onListChange = true
+                    Audio.PlaySound(RageUI.Settings.Audio.LeftRight.audioName, RageUI.Settings.Audio.LeftRight.audioRef)
+                end
+                local Selected = (CurrentMenu.Controls.Select.Active)
+                Actions(Index, Selected, onListChange, Active)
+                if (Selected) then
+                    Audio.PlaySound(RageUI.Settings.Audio.Select.audioName, RageUI.Settings.Audio.Select.audioRef)
+                    if Submenu ~= nil and type(Submenu) == "table" then
+                        RageUI.NextMenu = Submenu[Index]
+                    end
+                end
+            end
         end
     end
     RageUI.Options = RageUI.Options + 1

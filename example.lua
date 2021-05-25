@@ -18,7 +18,7 @@ function RageUI.PoolMenus:Example()
 		Items:AddButton("Hello world", "Hello world.", { IsDisabled = false }, function(onSelected)
 
 		end)
-		Items:AddList("List", { 1, 2, 3 }, ListIndex, nil, {}, function(Index, onSelected, onListChange)
+		Items:AddList("List", { 1, 2, 3 }, ListIndex, nil, { IsDisabled = false }, function(Index, onSelected, onListChange)
 			if (onListChange) then
 				ListIndex = Index;
 			end
