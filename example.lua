@@ -7,6 +7,8 @@
 local MainMenu = RageUI.CreateMenu("Title", "SUBTITLE");
 MainMenu.EnableMouse = true;
 
+local SubMenu = RageUI.CreateSubMenu(MainMenu, "Title", "SubTitle")
+
 local Checked = false;
 local ListIndex = 1;
 
@@ -15,6 +17,9 @@ local GridX, GridY = 0, 0
 function RageUI.PoolMenus:Example()
 	MainMenu:IsVisible(function(Items)
 		Items:Heritage(1, 2)
+		Items:AddButton("Sub Menu", "Sub Menu", { IsDisabled = false }, function(onSelected)
+	
+		end, SubMenu)
 		Items:AddButton("Hello world", "Hello world.", { IsDisabled = false }, function(onSelected)
 
 		end)
@@ -36,6 +41,15 @@ function RageUI.PoolMenus:Example()
 			GridX = X;
 			GridY = Y;
 		end, 1)
+	end)
+
+	SubMenu:IsVisible(function(Items)
+		-- Items
+		Items:AddButton("Hello world", "Hello world.", { IsDisabled = false }, function(onSelected)
+
+		end)
+	end, function()
+		-- Panels
 	end)
 end
 
