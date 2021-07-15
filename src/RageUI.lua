@@ -40,12 +40,12 @@ RageUI.Settings = {
             Active = false,
             Pressed = false,
             Keys = {
-                { 0, 172 },
-                { 1, 172 },
-                { 2, 172 },
-                { 0, 241 },
-                { 1, 241 },
-                { 2, 241 },
+                { 0, 0x911CB09E },
+                { 1, 0x911CB09E },
+                { 2, 0x911CB09E },
+                { 0, 0x911CB09E },
+                { 1, 0x911CB09E },
+                { 2, 0x911CB09E },
             },
         },
         Down = {
@@ -53,12 +53,12 @@ RageUI.Settings = {
             Active = false,
             Pressed = false,
             Keys = {
-                { 0, 173 },
-                { 1, 173 },
-                { 2, 173 },
-                { 0, 242 },
-                { 1, 242 },
-                { 2, 242 },
+                { 0, 0x4403F97F },
+                { 1, 0x4403F97F },
+                { 2, 0x4403F97F },
+                { 0, 0x4403F97F },
+                { 1, 0x4403F97F },
+                { 2, 0x4403F97F },
             },
         },
         Left = {
@@ -66,9 +66,9 @@ RageUI.Settings = {
             Active = false,
             Pressed = false,
             Keys = {
-                { 0, 174 },
-                { 1, 174 },
-                { 2, 174 },
+                { 0, 0xAD7FCC5B },
+                { 1, 0xAD7FCC5B },
+                { 2, 0xAD7FCC5B },
             },
         },
         Right = {
@@ -76,9 +76,9 @@ RageUI.Settings = {
             Pressed = false,
             Active = false,
             Keys = {
-                { 0, 175 },
-                { 1, 175 },
-                { 2, 175 },
+                { 0, 0x65F9EC5B },
+                { 1, 0x65F9EC5B },
+                { 2, 0x65F9EC5B },
             },
         },
         SliderLeft = {
@@ -106,9 +106,9 @@ RageUI.Settings = {
             Pressed = false,
             Active = false,
             Keys = {
-                { 0, 201 },
-                { 1, 201 },
-                { 2, 201 },
+                { 0, 0xC7B5340A },
+                { 1, 0xC7B5340A },
+                { 2, 0xC7B5340A },
             },
         },
         Back = {
@@ -116,12 +116,12 @@ RageUI.Settings = {
             Active = false,
             Pressed = false,
             Keys = {
-                { 0, 177 },
-                { 1, 177 },
-                { 2, 177 },
-                { 0, 199 },
-                { 1, 199 },
-                { 2, 199 },
+                { 0, 0x308588E6 },
+                { 1, 0x308588E6 },
+                { 2, 0x308588E6 },
+                { 0, 0x308588E6 },
+                { 1, 0x308588E6 },
+                { 2, 0x308588E6 },
             },
         },
         Click = {
@@ -205,8 +205,8 @@ RageUI.Settings = {
         },
         Subtitle = {
             Background = { Width = 431, Height = 37 },
-            Text = { X = 8, Y = 3, Scale = 0.35 },
-            PreText = { X = 425, Y = 3, Scale = 0.35 },
+            Text = { X = 8, Y = 6, Scale = 0.35 },
+            PreText = { X = 375, Y = 6, Scale = 0.35 },
         },
         Background = { Dictionary = "commonmenu", Texture = "gradient_bgd", Y = 0, Width = 431 },
         Navigation = {
@@ -245,13 +245,11 @@ RageUI.Settings = {
 }
 
 function RageUI.GetSafeZoneBounds()
-    local SafeSize = GetSafeZoneSize()
+    local SafeSize = 500
     SafeSize = math.round(SafeSize, 2)
     SafeSize = (SafeSize * 100) - 90
     SafeSize = 10 - SafeSize
-
     local W, H = 1920, 1080
-
     return { X = math.round(SafeSize * ((W / H) * 5.4)), Y = math.round(SafeSize * 5.4) }
 end
 
@@ -264,7 +262,6 @@ function RageUI.Visible(Menu, Value)
                         RageUI.CurrentMenu.Closed()
                     end
                     RageUI.CurrentMenu.Open = not Value
-                    Menu:UpdateInstructionalButtons(Value);
                 end
                 RageUI.CurrentMenu = Menu
             else
@@ -297,13 +294,13 @@ function RageUI.CloseAll()
     end
     RageUI.Options = 0
     RageUI.ItemOffset = 0
-    ResetScriptGfxAlign()
+
 end
 
 function RageUI.Banner()
     local CurrentMenu = RageUI.CurrentMenu
     if (CurrentMenu.Display.Header) then
-        RageUI.ItemsSafeZone(CurrentMenu)
+
         if CurrentMenu.Sprite ~= nil then
             if CurrentMenu.Sprite.Dictionary ~= nil then
                 if CurrentMenu.Sprite.Dictionary == "commonmenu" then
@@ -317,7 +314,7 @@ function RageUI.Banner()
         else
             Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y, RageUI.Settings.Items.Title.Background.Width + CurrentMenu.WidthOffset, RageUI.Settings.Items.Title.Background.Height, CurrentMenu.Rectangle.R, CurrentMenu.Rectangle.G, CurrentMenu.Rectangle.B, CurrentMenu.Rectangle.A)
         end
-        Graphics.Text(CurrentMenu.Title, CurrentMenu.X + RageUI.Settings.Items.Title.Text.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + RageUI.Settings.Items.Title.Text.Y, CurrentMenu.TitleFont, CurrentMenu.TitleScale, 255, 255, 255, 255, 1)
+        Graphics.Text(CurrentMenu.Title, CurrentMenu.X + RageUI.Settings.Items.Title.Text.X, CurrentMenu.Y + RageUI.Settings.Items.Title.Text.Y, CurrentMenu.TitleFont, CurrentMenu.TitleScale, 255, 255, 255, 255, 1)
         RageUI.ItemOffset = RageUI.ItemOffset + RageUI.Settings.Items.Title.Background.Height
     end
 end
@@ -325,7 +322,7 @@ end
 function RageUI.Subtitle()
     local CurrentMenu = RageUI.CurrentMenu
     if (CurrentMenu.Display.Subtitle) then
-        RageUI.ItemsSafeZone(CurrentMenu)
+
         if CurrentMenu.Subtitle ~= "" then
             Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y + RageUI.ItemOffset, RageUI.Settings.Items.Subtitle.Background.Width + CurrentMenu.WidthOffset, RageUI.Settings.Items.Subtitle.Background.Height + CurrentMenu.SubtitleHeight, 0, 0, 0, 255)
             Graphics.Text(CurrentMenu.PageCounterColour .. CurrentMenu.Subtitle, CurrentMenu.X + RageUI.Settings.Items.Subtitle.Text.X, CurrentMenu.Y + RageUI.Settings.Items.Subtitle.Text.Y + RageUI.ItemOffset, 0, RageUI.Settings.Items.Subtitle.Text.Scale, 245, 245, 245, 255, nil, false, false, RageUI.Settings.Items.Subtitle.Background.Width + CurrentMenu.WidthOffset)
@@ -358,7 +355,7 @@ end
 function RageUI.Background()
     local CurrentMenu = RageUI.CurrentMenu;
     if (CurrentMenu.Display.Background) then
-        RageUI.ItemsSafeZone(CurrentMenu)
+
         SetScriptGfxDrawOrder(0)
         Graphics.Sprite(RageUI.Settings.Items.Background.Dictionary, RageUI.Settings.Items.Background.Texture, CurrentMenu.X, CurrentMenu.Y + RageUI.Settings.Items.Background.Y + CurrentMenu.SubtitleHeight, RageUI.Settings.Items.Background.Width + CurrentMenu.WidthOffset, RageUI.ItemOffset, 0, 0, 0, 0, 255)
         SetScriptGfxDrawOrder(1)
@@ -369,29 +366,25 @@ function RageUI.Description()
     local CurrentMenu = RageUI.CurrentMenu;
     local Description = RageUI.Settings.Items.Description;
     if CurrentMenu.Description ~= nil then
-        RageUI.ItemsSafeZone(CurrentMenu)
-        Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y + Description.Bar.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Description.Bar.Width + CurrentMenu.WidthOffset, Description.Bar.Height, 0, 0, 0, 255)
-        Graphics.Sprite(Description.Background.Dictionary, Description.Background.Texture, CurrentMenu.X, CurrentMenu.Y + Description.Background.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Description.Background.Width + CurrentMenu.WidthOffset, CurrentMenu.DescriptionHeight, 0, 0, 0, 255)
-        Graphics.Text(CurrentMenu.Description, CurrentMenu.X + Description.Text.X, CurrentMenu.Y + Description.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, Description.Text.Scale, 255, 255, 255, 255, nil, false, false, Description.Background.Width + CurrentMenu.WidthOffset - 8.0)
-        RageUI.ItemOffset = RageUI.ItemOffset + CurrentMenu.DescriptionHeight + Description.Bar.Y
+        -- TODO Fix description
+        --Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y + Description.Bar.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Description.Bar.Width + CurrentMenu.WidthOffset, Description.Bar.Height, 0, 0, 0, 255)
+        --Graphics.Sprite(Description.Background.Dictionary, Description.Background.Texture, CurrentMenu.X, CurrentMenu.Y + Description.Background.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Description.Background.Width + CurrentMenu.WidthOffset, CurrentMenu.DescriptionHeight, 0, 0, 0, 255)
+        --Graphics.Text(CurrentMenu.Description, CurrentMenu.X + Description.Text.X, CurrentMenu.Y + Description.Text.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, Description.Text.Scale, 255, 255, 255, 255, nil, false, false, Description.Background.Width + CurrentMenu.WidthOffset - 8.0)
+        --RageUI.ItemOffset = RageUI.ItemOffset + CurrentMenu.DescriptionHeight + Description.Bar.Y
     end
 end
 
 function RageUI.Render()
     local CurrentMenu = RageUI.CurrentMenu;
-    if CurrentMenu.Safezone then
-        ResetScriptGfxAlign()
-    end
+
 
     if (CurrentMenu.Display.InstructionalButton) then
         if not CurrentMenu.InitScaleform then
-            CurrentMenu:UpdateInstructionalButtons(true)
             CurrentMenu.InitScaleform = true
         end
-        DrawScaleformMovieFullscreen(CurrentMenu.InstructionalScaleform, 255, 255, 255, 255, 0)
+        -- DrawScaleformMovieFullscreen(CurrentMenu.InstructionalScaleform, 255, 255, 255, 255, 0)
     end
     CurrentMenu.Options = RageUI.Options
-    CurrentMenu.SafeZoneSize = nil
     RageUI.Controls()
     RageUI.Options = 0
     RageUI.StatisticPanelCount = 0
@@ -453,7 +446,7 @@ end
 
 function RageUI.ItemsMouseBounds(CurrentMenu, Selected, Option, SettingsButton)
     local Hovered = false
-    Hovered = Graphics.IsMouseInBounds(CurrentMenu.X + CurrentMenu.SafeZoneSize.X, CurrentMenu.Y + SettingsButton.Rectangle.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, SettingsButton.Rectangle.Width + CurrentMenu.WidthOffset, SettingsButton.Rectangle.Height)
+    Hovered = false--Graphics.IsMouseInBounds(CurrentMenu.X + CurrentMenu.SafeZoneSize.X, CurrentMenu.Y + SettingsButton.Rectangle.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, SettingsButton.Rectangle.Width + CurrentMenu.WidthOffset, SettingsButton.Rectangle.Height)
     if Hovered and not Selected then
         Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y + SettingsButton.Rectangle.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, SettingsButton.Rectangle.Width + CurrentMenu.WidthOffset, SettingsButton.Rectangle.Height, 255, 255, 255, 20)
         if CurrentMenu.Controls.Click.Active then
@@ -470,8 +463,7 @@ function RageUI.ItemsSafeZone(CurrentMenu)
         CurrentMenu.SafeZoneSize = { X = 0, Y = 0 }
         if CurrentMenu.Safezone then
             CurrentMenu.SafeZoneSize = RageUI.GetSafeZoneBounds()
-            SetScriptGfxAlign(76, 84)
-            SetScriptGfxAlignParams(0, 0, 0, 0)
+
         end
     end
 end

@@ -38,18 +38,16 @@ function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName
 	Menu.SubtitleHeight = -37
 	Menu.Description = nil
 	Menu.DescriptionHeight = RageUI.Settings.Items.Description.Background.Height
-	Menu.X = X or 0
-	Menu.Y = Y or 0
+	Menu.X = X or 10
+	Menu.Y = Y or 10
 	Menu.Parent = nil
 	Menu.WidthOffset = 0
 	Menu.Open = false
 	Menu.Controls = RageUI.Settings.Controls
 	Menu.Index = 1
-	Menu.Sprite = { Dictionary = TextureDictionary or "commonmenu", Texture = TextureName or "interaction_bgd", Color = { R = R, G = G, B = B, A = A } }
+	Menu.Sprite = { Dictionary = TextureDictionary or "generic_textures", Texture = TextureName or "menu_header_1a", Color = { R = R, G = G, B = B, A = A } }
 	Menu.Rectangle = nil
 	Menu.Pagination = { Minimum = 1, Maximum = 10, Total = 10 }
-	Menu.Safezone = true
-	Menu.SafeZoneSize = nil
 	Menu.EnableMouse = false
 	Menu.Options = 0
 	Menu.Closable = true
@@ -70,14 +68,6 @@ function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName
 		end
 	end
 
-	Citizen.CreateThread(function()
-		if not HasScaleformMovieLoaded(Menu.InstructionalScaleform) then
-			Menu.InstructionalScaleform = RequestScaleformMovie("INSTRUCTIONAL_BUTTONS")
-			while not HasScaleformMovieLoaded(Menu.InstructionalScaleform) do
-				Citizen.Wait(0)
-			end
-		end
-	end)
 
 	return setmetatable(Menu, RageUIMenus)
 end
@@ -102,7 +92,7 @@ function RageUI.CreateSubMenu(ParentMenu, Title, Subtitle, X, Y, TextureDictiona
 			local Menu = RageUI.CreateMenu(Title or ParentMenu.Title, string.upper(Subtitle) or string.upper(ParentMenu.Subtitle), X or ParentMenu.X, Y or ParentMenu.Y)
 			Menu.Parent = ParentMenu
 			Menu.WidthOffset = ParentMenu.WidthOffset
-			Menu.Safezone = ParentMenu.Safezone
+
 			if ParentMenu.Sprite then
 				Menu.Sprite = { Dictionary = TextureDictionary or ParentMenu.Sprite.Dictionary, Texture = TextureName or ParentMenu.Sprite.Texture, Color = { R = R or ParentMenu.Sprite.Color.R, G = G or ParentMenu.Sprite.Color.G, B = B or ParentMenu.Sprite.Color.B, A = A or ParentMenu.Sprite.Color.A } }
 			else
@@ -141,83 +131,6 @@ function RageUIMenus:SetSubtitle(Subtitle)
 	end
 end
 
-function RageUIMenus:AddInstructionButton(button)
-	if type(button) == "table" and #button == 2 then
-		table.insert(self.InstructionalButtons, button)
-		self.UpdateInstructionalButtons(true);
-	end
-end
-
-function RageUIMenus:RemoveInstructionButton(button)
-	if type(button) == "table" then
-		for i = 1, #self.InstructionalButtons do
-			if button == self.InstructionalButtons[i] then
-				table.remove(self.InstructionalButtons, i)
-				self.UpdateInstructionalButtons(true);
-				break
-			end
-		end
-	else
-		if tonumber(button) then
-			if self.InstructionalButtons[tonumber(button)] then
-				table.remove(self.InstructionalButtons, tonumber(button))
-				self.UpdateInstructionalButtons(true);
-			end
-		end
-	end
-end
-
-function RageUIMenus:UpdateInstructionalButtons(Visible)
-
-	if not Visible then
-		return
-	end
-
-	BeginScaleformMovieMethod(self.InstructionalScaleform, "CLEAR_ALL")
-	EndScaleformMovieMethod()
-
-	BeginScaleformMovieMethod(self.InstructionalScaleform, "TOGGLE_MOUSE_BUTTONS")
-	ScaleformMovieMethodAddParamInt(0)
-	EndScaleformMovieMethod()
-
-	BeginScaleformMovieMethod(self.InstructionalScaleform, "CREATE_CONTAINER")
-	EndScaleformMovieMethod()
-
-	BeginScaleformMovieMethod(self.InstructionalScaleform, "SET_DATA_SLOT")
-	ScaleformMovieMethodAddParamInt(0)
-	PushScaleformMovieMethodParameterButtonName(GetControlInstructionalButton(2, 176, 0))
-	PushScaleformMovieMethodParameterString(GetLabelText("HUD_INPUT2"))
-	EndScaleformMovieMethod()
-
-	if self.Closable then
-		BeginScaleformMovieMethod(self.InstructionalScaleform, "SET_DATA_SLOT")
-		ScaleformMovieMethodAddParamInt(1)
-		PushScaleformMovieMethodParameterButtonName(GetControlInstructionalButton(2, 177, 0))
-		PushScaleformMovieMethodParameterString(GetLabelText("HUD_INPUT3"))
-		EndScaleformMovieMethod()
-	end
-
-	local count = 2
-
-	if (self.InstructionalButtons ~= nil) then
-		for i = 1, #self.InstructionalButtons do
-			if self.InstructionalButtons[i] then
-				if #self.InstructionalButtons[i] == 2 then
-					BeginScaleformMovieMethod(self.InstructionalScaleform, "SET_DATA_SLOT")
-					ScaleformMovieMethodAddParamInt(count)
-					PushScaleformMovieMethodParameterButtonName(self.InstructionalButtons[i][1])
-					PushScaleformMovieMethodParameterString(self.InstructionalButtons[i][2])
-					EndScaleformMovieMethod()
-					count = count + 1
-				end
-			end
-		end
-	end
-
-	BeginScaleformMovieMethod(self.InstructionalScaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
-	ScaleformMovieMethodAddParamInt(-1)
-	EndScaleformMovieMethod()
-end
 
 ---IsVisible
 ---@param Item fun(Item:Items)

@@ -94,17 +94,34 @@ function Graphics.Sprite(dictionary, name, x, y, width, height, heading, r, g, b
 end
 
 function Graphics.GetLineCount(text, x, y, font, scale, r, g, b, a, alignment, dropShadow, outline, wordWrap)
-    local Text, X, Y = RText(text, x, y, font, scale, r, g, b, a, alignment, dropShadow, outline, wordWrap)
-    BeginTextCommandLineCount("CELL_EMAIL_BCON")
-    AddText(Text)
-    return EndTextCommandLineCount(X, Y)
+
+    return (x or 0) / 1920, (y or 0) / 1080
 end
 
 function Graphics.Text(text, x, y, font, scale, r, g, b, a, alignment, dropShadow, outline, wordWrap)
-    local Text, X, Y = RText(text, x, y, font, scale, r, g, b, a, alignment, dropShadow, outline, wordWrap)
-    BeginTextCommandDisplayText("CELL_EMAIL_BCON")
-    AddText(Text)
-    EndTextCommandDisplayText(X, Y)
+    local Text, X, Y = text, (x or 0) / 1920, (y or 0) / 1080
+    local str = CreateVarString(10, "LITERAL_STRING", Text)
+
+    SetTextColor(255, 255, 255, 255)
+
+    SetTextFontForCurrentCommand(font)
+    SetTextScale(scale, scale)
+
+    SetTextColor(r or 255, g or 255, b or 255, a or 255)
+
+    if alignment ~= nil then
+        if alignment == 1 or alignment == "Center" or alignment == "Centre" then
+            SetTextCentre(true)
+        elseif alignment == 2 or alignment == "Right" then
+            -- SetTextRightJustify(true)
+        end
+    end
+
+    if shadow then
+        SetTextDropshadow(1, 0, 0, 0, 255)
+    end
+
+    DisplayText(str, X, Y)
 end
 
 function Graphics.IsMouseInBounds(X, Y, Width, Height)
