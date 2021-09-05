@@ -300,6 +300,30 @@ function RageUI.CloseAll()
     ResetScriptGfxAlign()
 end
 
+function RageUI.SetScaleformParams(scaleform, data)
+    data = data or {}
+    for k, v in pairs(data) do
+        PushScaleformMovieFunction(scaleform, v.name)
+        if v.param then
+            for _, par in pairs(v.param) do
+                if math.type(par) == "integer" then
+                    PushScaleformMovieFunctionParameterInt(par)
+                elseif type(par) == "boolean" then
+                    PushScaleformMovieFunctionParameterBool(par)
+                elseif math.type(par) == "float" then
+                    PushScaleformMovieFunctionParameterFloat(par)
+                elseif type(par) == "string" then
+                    PushScaleformMovieFunctionParameterString(par)
+                end
+            end
+        end
+        if v.func then
+            v.func()
+        end
+        PopScaleformMovieFunctionVoid()
+    end
+end
+
 function RageUI.Banner()
     local CurrentMenu = RageUI.CurrentMenu
     if (CurrentMenu.Display.Header) then
@@ -316,6 +340,21 @@ function RageUI.Banner()
             end
         else
             Graphics.Rectangle(CurrentMenu.X, CurrentMenu.Y, RageUI.Settings.Items.Title.Background.Width + CurrentMenu.WidthOffset, RageUI.Settings.Items.Title.Background.Height, CurrentMenu.Rectangle.R, CurrentMenu.Rectangle.G, CurrentMenu.Rectangle.B, CurrentMenu.Rectangle.A)
+        end
+        if (CurrentMenu.Display.Glare) then
+            local ScaleformMovie = RequestScaleformMovie("MP_MENU_GLARE")
+            ---@type number
+            local Glarewidth = RageUI.Settings.Items.Title.Background.Width
+            ---@type number
+            local Glareheight = RageUI.Settings.Items.Title.Background.Height
+            ---@type number
+            local GlareX = CurrentMenu.X / 1920 + (CurrentMenu.SafeZoneSize.X / (64.399 - (CurrentMenu.WidthOffset * 0.065731)))
+            ---@type number
+            local GlareY = CurrentMenu.Y / 1080 + CurrentMenu.SafeZoneSize.Y / 33.195020746888
+            RageUI.SetScaleformParams(ScaleformMovie, {
+                { name = "SET_DATA_SLOT", param = { GetGameplayCamRelativeHeading() } }
+            })
+            DrawScaleformMovie(ScaleformMovie, GlareX, GlareY, Glarewidth / 430, Glareheight / 100, 255, 255, 255, 255, 0)
         end
         Graphics.Text(CurrentMenu.Title, CurrentMenu.X + RageUI.Settings.Items.Title.Text.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + RageUI.Settings.Items.Title.Text.Y, CurrentMenu.TitleFont, CurrentMenu.TitleScale, 255, 255, 255, 255, 1)
         RageUI.ItemOffset = RageUI.ItemOffset + RageUI.Settings.Items.Title.Background.Height
