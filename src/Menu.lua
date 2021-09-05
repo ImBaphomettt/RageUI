@@ -25,6 +25,7 @@ function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName
 	Menu.InstructionalButtons = {}
 
 	Menu.Display.Header = true;
+	Menu.Display.Glare = false;
 	Menu.Display.Subtitle = true;
 	Menu.Display.Background = true;
 	Menu.Display.Navigation = true;
@@ -139,6 +140,11 @@ function RageUIMenus:SetSubtitle(Subtitle)
 	else
 		self.SubtitleHeight = -37
 	end
+end
+
+function RageUIMenus:DisplayGlare(boolean)
+    self.Display.Glare = boolean
+    return self.Display.Glare
 end
 
 function RageUIMenus:AddInstructionButton(button)
