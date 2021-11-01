@@ -346,7 +346,7 @@ function Items:AddList(Label, Items, Index, Description, Style, Actions, Submenu
                     Audio.PlaySound(RageUI.Settings.Audio.LeftRight.audioName, RageUI.Settings.Audio.LeftRight.audioRef)
                 end
                 local Selected = (CurrentMenu.Controls.Select.Active)
-                Actions(Index, Selected, onListChange, Active)
+                Actions(Index, Items[Index], Selected, onListChange, Active)
                 if (Selected) then
                     Audio.PlaySound(RageUI.Settings.Audio.Select.audioName, RageUI.Settings.Audio.Select.audioRef)
                     if Submenu ~= nil and type(Submenu) == "table" then
