@@ -103,7 +103,7 @@ function Items:AddButton(Label, Description, Style, Actions, Submenu)
             RageUI.ItemsDescription(Description);
             if not (Style.IsDisabled) then
                 local Selected = (CurrentMenu.Controls.Select.Active)
-                Actions(Selected)
+                Actions(Selected, Active)
                 if Selected then
                     Audio.PlaySound(RageUI.Settings.Audio.Select.audioName, RageUI.Settings.Audio.Select.audioRef)
                     if Submenu and Submenu() then
