@@ -250,7 +250,7 @@ function RageUI.GetSafeZoneBounds()
     SafeSize = (SafeSize * 100) - 90
     SafeSize = 10 - SafeSize
 
-    local W, H = 1920, 1080
+    local W, H = GetActiveScreenResolution()
 
     return { X = math.round(SafeSize * ((W / H) * 5.4)), Y = math.round(SafeSize * 5.4) }
 end
