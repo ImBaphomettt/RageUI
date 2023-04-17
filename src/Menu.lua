@@ -230,7 +230,9 @@ function RageUIMenus:IsVisible(Item, Panel)
 		RageUI.Background();
 		RageUI.Navigation();
 		RageUI.Description();
-		Panel(Panels);
+		if Panel and type(Panel) == "function" then
+			Panel(Panels);
+		end
 		RageUI.PoolMenus.Timer = 1
 		RageUI.Render()
 	end
