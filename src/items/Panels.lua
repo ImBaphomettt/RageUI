@@ -144,3 +144,180 @@ end
 function Panels:GridVertical(StartedY, TopText, BottomText, Action, Index)
     UIGridPanel(GridType.Vertical, nil, StartedY, TopText, BottomText, nil, nil, Action, Index)
 end
+
+
+---@type table
+local Colour = {
+    Background = { Dictionary = "commonmenu", Texture = "gradient_bgd", Y = 4, Width = 431, Height = 112 },
+    LeftArrow = { Dictionary = "commonmenu", Texture = "arrowleft", X = 7.5, Y = 15, Width = 30, Height = 30 },
+    RightArrow = { Dictionary = "commonmenu", Texture = "arrowright", X = 393.5, Y = 15, Width = 30, Height = 30 },
+    Header = { X = 215.5, Y = 15, Scale = 0.35 },
+    Box = { X = 15, Y = 55, Width = 44.5, Height = 44.5 },
+    SelectedRectangle = { X = 15, Y = 47, Width = 44.5, Height = 8 },
+}
+
+---ColourPanel
+---@param Title string
+---@param Colours thread
+---@param MinimumIndex number
+---@param CurrentIndex number
+---@param Callback function
+---@return nil
+---@public
+---@return void
+function Panels:Colour(Title, Colours, MinimumIndex, CurrentIndex, Callback, Index)
+
+    ---@type table
+    local CurrentMenu = RageUI.CurrentMenu;
+
+    if CurrentMenu ~= nil then
+        if (CurrentMenu.Index == Index) then
+
+            ---@type number
+            local Maximum = (#Colours > 9) and 9 or #Colours
+
+            ---@type boolean
+            local Hovered = Graphics.IsMouseInBounds(CurrentMenu.X + Colour.Box.X + CurrentMenu.SafeZoneSize.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.Box.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, (Colour.Box.Width * Maximum), Colour.Box.Height)
+
+            ---@type number
+            local LeftArrowHovered = Graphics.IsMouseInBounds(CurrentMenu.X + Colour.LeftArrow.X + CurrentMenu.SafeZoneSize.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.LeftArrow.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.LeftArrow.Width, Colour.LeftArrow.Height)
+
+            ---@type number
+            local RightArrowHovered = Graphics.IsMouseInBounds(CurrentMenu.X + Colour.RightArrow.X + CurrentMenu.SafeZoneSize.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.RightArrow.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.RightArrow.Width, Colour.RightArrow.Height)
+
+            ---@type boolean
+            local Selected = false
+
+            Graphics.Sprite(Colour.Background.Dictionary, Colour.Background.Texture, CurrentMenu.X, CurrentMenu.Y + Colour.Background.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.Background.Width + CurrentMenu.WidthOffset, Colour.Background.Height)
+            Graphics.Sprite(Colour.LeftArrow.Dictionary, Colour.LeftArrow.Texture, CurrentMenu.X + Colour.LeftArrow.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.LeftArrow.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.LeftArrow.Width, Colour.LeftArrow.Height)
+            Graphics.Sprite(Colour.RightArrow.Dictionary, Colour.RightArrow.Texture, CurrentMenu.X + Colour.RightArrow.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.RightArrow.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.RightArrow.Width, Colour.RightArrow.Height)
+
+            Graphics.Rectangle(CurrentMenu.X + Colour.SelectedRectangle.X + (Colour.Box.Width * (CurrentIndex - MinimumIndex)) + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.SelectedRectangle.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.SelectedRectangle.Width, Colour.SelectedRectangle.Height, 245, 245, 245, 255)
+
+            for Index = 1, Maximum do
+                Graphics.Rectangle(CurrentMenu.X + Colour.Box.X + (Colour.Box.Width * (Index - 1)) + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.Box.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.Box.Width, Colour.Box.Height, table.unpack(Colours[MinimumIndex + Index - 1]))
+            end
+
+            Graphics.Text((Title and Title or "") .. " (" .. CurrentIndex .. " sur " .. #Colours .. ")", CurrentMenu.X + RageUI.Settings.Panels.Grid.Text.Top.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + RageUI.Settings.Panels.Grid.Text.Top.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, RageUI.Settings.Panels.Grid.Text.Top.Scale, 245, 245, 245, 255, 1)
+
+
+            if Hovered or LeftArrowHovered or RightArrowHovered then
+                if RageUI.Settings.Controls.Click.Active then
+                    Selected = true
+                    if LeftArrowHovered then
+                        CurrentIndex = CurrentIndex - 1
+                        if CurrentIndex < 1 then
+                            CurrentIndex = #Colours
+                            MinimumIndex = #Colours - Maximum + 1
+                        elseif CurrentIndex < MinimumIndex then
+                            MinimumIndex = MinimumIndex - 1
+                        end
+                    elseif RightArrowHovered then
+                        CurrentIndex = CurrentIndex + 1
+                        if CurrentIndex > #Colours then
+                            CurrentIndex = 1
+                            MinimumIndex = 1
+                        elseif CurrentIndex > MinimumIndex + Maximum - 1 then
+                            MinimumIndex = MinimumIndex + 1
+                        end
+                    elseif Hovered then
+                        for Index = 1, Maximum do
+                            if Graphics.IsMouseInBounds(CurrentMenu.X + Colour.Box.X + (Colour.Box.Width * (Index - 1)) + CurrentMenu.SafeZoneSize.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.Box.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.Box.Width, Colour.Box.Height) then
+                                CurrentIndex = MinimumIndex + Index - 1
+                            end
+                        end
+                    end
+                end
+            end
+
+
+            RageUI.ItemOffset = RageUI.ItemOffset + Colour.Background.Height + Colour.Background.Y
+
+            if (Hovered or LeftArrowHovered or RightArrowHovered) and RageUI.Settings.Controls.Click.Active then
+                --Audio.PlaySound(Audio[Audio.Use].Select.audioName, Audio[Audio.Use].Select.audioRef)
+                Audio.PlaySound(RageUI.Settings.Audio.Select.audioName, RageUI.Settings.Audio.Select.audioRef, true)
+            end
+
+            Callback((Hovered or LeftArrowHovered or RightArrowHovered), Selected, MinimumIndex, CurrentIndex)
+        end
+    end
+end
+
+local Percentage = {
+    Background = { Dictionary = "commonmenu", Texture = "gradient_bgd", Y = 4, Width = 431, Height = 76 },
+    Bar = { X = 9, Y = 50, Width = 413, Height = 10 },
+    Text = {
+        Left = { X = 25, Y = 15, Scale = 0.35 },
+        Middle = { X = 215.5, Y = 15, Scale = 0.35 },
+        Right = { X = 398, Y = 15, Scale = 0.35 },
+    },
+}
+
+---PercentagePanel
+---@param Percent number
+---@param HeaderText string
+---@param MinText string
+---@param MaxText string
+---@param Callback function
+---@param Index number
+---@return nil
+---@public
+function Panels:Percent(Percent, HeaderText, MinText, MaxText, Callback, Index)
+    local CurrentMenu = RageUI.CurrentMenu
+
+    if CurrentMenu ~= nil then
+        if (CurrentMenu.Index == Index) then
+
+            ---@type boolean
+            local Hovered = Graphics.IsMouseInBounds(CurrentMenu.X + Percentage.Bar.X + CurrentMenu.SafeZoneSize.X, CurrentMenu.Y + Percentage.Bar.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset - 4, Percentage.Bar.Width + CurrentMenu.WidthOffset, Percentage.Bar.Height + 8)
+
+            ---@type boolean
+            local Selected = false
+
+            ---@type number
+            local Progress = Percentage.Bar.Width
+
+            if Percent < 0.0 then
+                Percent = 0.0
+            elseif Percent > 1.0 then
+                Percent = 1.0
+            end
+
+            Progress = Progress * Percent
+
+            Graphics.Sprite(Percentage.Background.Dictionary, Percentage.Background.Texture, CurrentMenu.X, CurrentMenu.Y + Percentage.Background.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Percentage.Background.Width + CurrentMenu.WidthOffset, Percentage.Background.Height)
+            Graphics.Rectangle(CurrentMenu.X + Percentage.Bar.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Percentage.Bar.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Percentage.Bar.Width, Percentage.Bar.Height, 87, 87, 87, 255)
+            Graphics.Rectangle(CurrentMenu.X + Percentage.Bar.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Percentage.Bar.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Progress, Percentage.Bar.Height, 245, 245, 245, 255)
+
+            Graphics.Text(HeaderText or "Opacity", CurrentMenu.X + Percentage.Text.Middle.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Percentage.Text.Middle.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, Percentage.Text.Middle.Scale, 245, 245, 245, 255, 1)
+            Graphics.Text(MinText or "0%", CurrentMenu.X + Percentage.Text.Left.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Percentage.Text.Left.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, Percentage.Text.Left.Scale, 245, 245, 245, 255, 1)
+            Graphics.Text(MaxText or "100%", CurrentMenu.X + Percentage.Text.Right.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Percentage.Text.Right.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, 0, Percentage.Text.Right.Scale, 245, 245, 245, 255, 1)
+
+            if Hovered then
+                if IsDisabledControlPressed(0, 24) then
+                    Selected = true
+
+                    Progress = math.round(GetControlNormal(0, 239) * 1920) - CurrentMenu.SafeZoneSize.X - (CurrentMenu.X + Percentage.Bar.X + (CurrentMenu.WidthOffset / 2))
+
+                    if Progress < 0 then
+                        Progress = 0
+                    elseif Progress > (Percentage.Bar.Width) then
+                        Progress = Percentage.Bar.Width
+                    end
+
+                    Percent = math.round(Progress / Percentage.Bar.Width, 2)
+                end
+            end
+
+            RageUI.ItemOffset = RageUI.ItemOffset + Percentage.Background.Height + Percentage.Background.Y
+
+            if Hovered and Selected then
+                --local Audio = RageUI.Settings.Audio
+                --RageUI.PlaySound(Audio[Audio.Use].Slider.audioName, Audio[Audio.Use].Slider.audioRef, true)
+                Audio.PlaySound(RageUI.Settings.Audio.Slider.audioName, RageUI.Settings.Audio.Slider.audioRef, true)
+            end
+
+            Callback(Hovered, Selected, Percent)
+        end
+    end
+end

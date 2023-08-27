@@ -221,5 +221,7 @@ RageUI.ItemsColour = {
     DegenMagenta = { 255, 0, 255, 255 },
     Stunt1 = { 38, 136, 234, 255 },
     Stunt2 = { 224, 50, 50, 255 },
+    BleuClairMenu = { 46, 105, 187, 255 },
+    BleuFonceMenu = { 11, 60, 123, 255 },
 }
 

@@ -40,3 +40,7 @@ function string.upper(str)
 	end
 	return res
 end
+
+function string.FirstUp(str)
+	return string.upper(string.sub(str, 1, 1)) .. string.sub(str, 2)
+end
