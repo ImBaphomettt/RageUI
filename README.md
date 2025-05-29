@@ -9,3 +9,7 @@ To answer many questions, yes, you can use this library for commercial purposes.
 I want to thank everyone who helped create this reputation through their contributions or aggressive use of OUR work. I wish you all the best in the FiveM development community.
 
 Sincerely Baphomet (iTexZoz).
+
+# 🌐 Rejoignez notre communauté
+
+**🔗 [discord.gg/sensity](https://discord.gg/sensity)**  
