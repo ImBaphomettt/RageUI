@@ -6,7 +6,7 @@
 
 fx_version 'cerulean'
 
-games { 'gta5' }
+games { 'gta5', 'gta5enhanced' }
 
 client_scripts {
     'src/RageUI.lua',
